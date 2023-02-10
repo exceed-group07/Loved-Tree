@@ -29,9 +29,6 @@ class Tree:
         
 
 all_tree = []
-for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 0, 0, "#ffffff", 0, 0, 0, 0, 0, 0, False, False, False)
-    all_tree.append(temp)
 
 app = FastAPI()
 
@@ -66,6 +63,10 @@ def update_status():
             i.status_water = False
         else:
             i.status_water = True
+
+for i in range(HOW_MANY_TREE):
+    temp = Tree(i, 1, 25, 25, 0, 0, "#ffffff", 0, 0, 0, 0, 0, 0, False, False, False)
+    all_tree.append(temp)
 
 
 @app.get("/front")
