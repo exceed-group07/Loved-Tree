@@ -248,7 +248,7 @@ def dehumidify(tree_id: int, status: Union[bool, None] = None):
         return {"msg": "DEHUMIDIFIER ON"}
     return {"msg": "DEHUMIDIFIER OFF"}
 
-#@app.put("/disco")
+@app.put("/disco")
 #def disco():
     #for ai in range() :
     #x = requests.get("http://group7.exceed19.online/front")
