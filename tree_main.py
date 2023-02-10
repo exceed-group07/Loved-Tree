@@ -76,7 +76,7 @@ for i in range(HOW_MANY_TREE):
 
 
 @app.get("/front")
-def send_status():
+def send_status_front():
     update_status()
     all = []
     for tree in all_tree:
@@ -87,7 +87,7 @@ def send_status():
     return {"result": all}
 
 @app.get("/hardware")
-def send_status():
+def send_status_hardware():
     update_status()
     all = []
     for tree in all_tree:
@@ -95,7 +95,7 @@ def send_status():
         all.append({"tree_id": tree.tree_id,"status_temp": tree.status_temp, "status_water":tree.status_water, "status_humid":tree.status_humid, "status_dehumid": tree.status_dehumid})
     return {"result": all}
 
-@app.put("/hardware_update")
+@app.put("/hardware_update")    
 def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
     x = all_tree[tree_id]
     x: Tree
