@@ -39,9 +39,9 @@ app = FastAPI()
 def send_status():
     all = []
     for i in all_tree:
-        all.append({"tree_id": i.tree_id, "mode": i.mode, "temp_manual" : i.temp_manual, "temp_auto" : i.temp_auto, "humid_soil": .humid_soil, "humid_air": .humid_air, "color": .color, "intensity": .intensity,
-                    "temp_now": i.temp_now, "humid_soil_now": i.humid_soil, "humid_air_now": .humid_air_now, 
-                    "intensity_now": i.intensity_now, "status_temp": i.status_temp, "status_water":i.status_water, "status_humid":.status_humid, "status_dehumid": .status_dehumid})
+        all.append({"tree_id": i.tree_id, "mode": i.mode, "temp_manual" : i.temp_manual, "temp_auto" : i.temp_auto, "humid_soil": i.humid_soil, "humid_air": i.humid_air, "color": i.color, "intensity": i.intensity,
+                    "temp_now": i.temp_now, "humid_soil_now": i.humid_soil, "humid_air_now": i.humid_air_now, 
+                    "intensity_now": i.intensity_now, "status_temp": i.status_temp, "status_water": i.status_water, "status_humid": i.status_humid, "status_dehumid": i.status_dehumid})
     return {"result": all}
 
 @app.get("/hardware")
