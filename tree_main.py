@@ -74,6 +74,9 @@ for i in range(HOW_MANY_TREE):
     temp = Tree(i, 1, 25, 25, 50, 50, "#ffffff", 100, 25, 50, 50, 0, 100, False, False, False)
     all_tree.append(temp)
 
+@app.get("/")
+def welcome():
+    return "Welcome"
 
 @app.get("/front")
 def send_status_front():
