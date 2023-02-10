@@ -197,7 +197,10 @@ def water(tree_id:int, status: bool):
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant manually water in auto mode")
     x.status_water = status
-    return {"msg": "OK"}
+
+    if status:
+        return {"msg": "WATER ON"}
+    return {"msg": "WATER OFF"}
 
 @app.put("/humidnify")
 def humidnify_air(tree_id:int, status: bool):
@@ -208,7 +211,9 @@ def humidnify_air(tree_id:int, status: bool):
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant humidify in auto mode")
     x.status_humid = status
-    return {"msg": "OK"}
+    if status:
+        return {"msg": "HUMIDIFIER ON"}
+    return {"msg": "HUMIDOFIER OFF"}
 
 @app.put("/dehumidify")
 def dehumidify(tree_id: int, status: bool):
@@ -219,6 +224,8 @@ def dehumidify(tree_id: int, status: bool):
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant dehumidify in auto mode")
     x.status_dehumid = status
-    return {"msg": "OK"}
+    if status:
+        return {"msg": "DEHUMIDIFIER ON"}
+    return {"msg": "DEHUMIDOFIER OFF"}
 
 
