@@ -97,6 +97,8 @@ def send_status_hardware():
 
 @app.put("/hardware_update")    
 def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     x.temp_now = temp_now
@@ -109,6 +111,8 @@ def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_
 
 @app.put("/set_mode")
 def set_mode(tree_id: int, mode: Union[int, None] = None):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if mode is None:
@@ -124,6 +128,8 @@ def set_mode(tree_id: int, mode: Union[int, None] = None):
 
 @app.put("/set_intensity")
 def set_intensity(tree_id: int, intensity: int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     x.intensity = intensity
@@ -131,6 +137,8 @@ def set_intensity(tree_id: int, intensity: int):
 
 @app.put("/set_color") ## wait color from frontend
 def set_color(tree_id: int, color:str):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     x.color = color
@@ -138,6 +146,8 @@ def set_color(tree_id: int, color:str):
 
 @app.put("/set_temp_manual")
 def set_temp(tree_id: int, temp:int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
@@ -147,6 +157,8 @@ def set_temp(tree_id: int, temp:int):
 
 @app.put("/set_temp_auto")
 def set_AC(tree_id: int, temp: int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 0):
@@ -156,6 +168,8 @@ def set_AC(tree_id: int, temp: int):
 
 @app.put("/set_humid_soil")
 def set_humid_soil(tree_id: int, humid_soil:int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 0):
@@ -165,6 +179,8 @@ def set_humid_soil(tree_id: int, humid_soil:int):
 
 @app.put("/set_humid_air")
 def set_humid_air(tree_id: int, humid_air:int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 0):
@@ -174,6 +190,8 @@ def set_humid_air(tree_id: int, humid_air:int):
 
 @app.put("/water")
 def water(tree_id:int, status: bool):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
@@ -183,6 +201,8 @@ def water(tree_id:int, status: bool):
 
 @app.put("/humidnify")
 def humidnify_air(tree_id:int, status: bool):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
@@ -192,6 +212,8 @@ def humidnify_air(tree_id:int, status: bool):
 
 @app.put("/dehumidify")
 def dehumidify(tree_id: int, status: bool):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE}")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
