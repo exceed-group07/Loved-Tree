@@ -13,13 +13,13 @@ class Tree:
         self.mode = mode # 0 = manual, 1 = auto
         self.temp_manual = temp_manual # 0 - 100 celcius
         self.temp_auto = temp_auto # 0 - 100 celcius
-        self.humid_soil = humid_soil ######################################
+        self.humid_soil = humid_soil # level 0-9 higher is weter
         self.humid_air = humid_air # 0 - 100 % ## air humidity
         self.color = color # "red", "green", "blue" ## color of RGB
         self.intensity = intensity # 0 - 100 ## RGB light intensity
 
         self.temp_now = temp_now # 0 - 100 celcius
-        self.humid_soil_now = humid_soil_now####################################
+        self.humid_soil_now = humid_soil_now # level 0-9 higher is weter
         self.humid_air_now = humid_air_now # 0 - 100 % ## air humidity
         self.intensity_now = intensity_now # 
 
@@ -72,10 +72,10 @@ def update_status():
             tree.status_dehumid = False
 
         
-        if tree.humid_soil_now - tree.humid_soil > 5:############ change the number 5
-            tree.status_water = True
-        elif tree.humid_soil_now - tree.humid_soil < -5:###############
+        if tree.humid_soil_now - tree.humid_soil > 1:
             tree.status_water = False
+        elif tree.humid_soil_now - tree.humid_soil < -1:
+            tree.status_water = True
         else:
             tree.status_water = False
 
@@ -115,7 +115,8 @@ def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_
     x = all_tree[tree_id]
     x: Tree
     x.temp_now = temp_now
-    x.humid_soil_now = humid_soil_now################################ need to make into level from 1 to 10???
+    # humid_soil_now higher is dryer # x.humid_soil_now 0-9 higher is wetter
+    x.humid_soil_now = humid_soil_now################################ need to make into level from 0 to 9???
     x.humid_air_now = humid_air_now
     x.intensity_now = intensity_now
 
