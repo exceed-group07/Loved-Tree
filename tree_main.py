@@ -120,7 +120,7 @@ def set_mode(tree_id: int, mode: Union[int, None] = None):
             x.mode = 1
         else:
             x.mode = 0
-    elif mode in range(1):
+    elif mode in range(2):
         x.mode = mode
     else:
         raise HTTPException(status_code=400, detail = "mode only have 0(manaul) or 1(auto)")
