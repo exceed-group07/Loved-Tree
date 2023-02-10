@@ -89,6 +89,7 @@ def send_status():
     update_status()
     all = []
     for i in all_tree:
+        i:Tree
         all.append({"tree_id": i.tree_id,"status_temp": i.status_temp, "status_water":i.status_water, "status_humid":i.status_humid, "status_dehumid": i.status_dehumid})
     return {"result": all}
 
