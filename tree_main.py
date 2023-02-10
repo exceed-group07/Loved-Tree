@@ -76,7 +76,7 @@ for i in range(HOW_MANY_TREE):
 
 @app.get("/")
 def welcome():
-    return "Welcome"
+    return "😭😭😭😭Welcome😭😭😭😭"
 
 @app.get("/front")
 def send_status_front():
