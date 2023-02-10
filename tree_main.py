@@ -189,42 +189,62 @@ def set_humid_air(tree_id: int, humid_air:int):
     return {"msg": "set humid_air"}
 
 @app.put("/water")
-def water(tree_id:int, status: bool):
+def water(tree_id:int, status: Union[bool, None] = None):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant manually water in auto mode")
-    x.status_water = status
+    if status is None:
+        if x.status_water == False:
+            x.status_water = True
+        else:
+            x.status_water = False
+    else:
+        x.status_water = status
 
-    if status:
+    if x.status_water:
         return {"msg": "WATER ON"}
     return {"msg": "WATER OFF"}
 
 @app.put("/humidnify")
-def humidnify_air(tree_id:int, status: bool):
+def humidnify_air(tree_id:int, status: Union[bool, None] = None):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant humidify in auto mode")
-    x.status_humid = status
-    if status:
+    if status is None:
+        if x.status_humid == False:
+            x.status_humid = True
+        else:
+            x.status_humid = False
+    else:
+        x.status_humid = status
+
+    if x.status_humid:
         return {"msg": "HUMIDIFIER ON"}
     return {"msg": "HUMIDOFIER OFF"}
 
 @app.put("/dehumidify")
-def dehumidify(tree_id: int, status: bool):
+def dehumidify(tree_id: int, status: Union[bool, None] = None):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     x = all_tree[tree_id]
     x: Tree
     if (x.mode == 1):
         raise HTTPException(status_code=400, detail = "cant dehumidify in auto mode")
-    x.status_dehumid = status
-    if status:
+    if status is None:
+        if x.status_dehumid == False:
+            x.status_dehumid = True
+        else:
+            x.status_dehumid = False
+    else:
+        x.status_dehumid = status
+
+    if x.status_dehumid:
         return {"msg": "DEHUMIDIFIER ON"}
     return {"msg": "DEHUMIDOFIER OFF"}
 
