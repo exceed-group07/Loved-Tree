@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 import requests
 
-HOW_MANY_TREE = 2
+HOW_MANY_TREE = 1
 
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: str, intensity: int,
