@@ -77,6 +77,11 @@ def set_intensity(tree_id: int, intensity: int):
     all_tree[tree_id].intensity = intensity
     return {"msg": "Changed intensity"}
 
+@app.put("/set_color") ## wait color from frontend
+def set_color(tree_id: int, color:str):
+    all_tree[tree_id].color = color
+    return {"msg": "set color"}
+
 @app.put("/set_temp_manual")
 def set_temp(tree_id: int, temp:int):
     if (all_tree[tree_id].mode == 1):
@@ -91,32 +96,37 @@ def set_AC(tree_id: int, temp: int):
     all_tree[tree_id].temp_auto = temp
     return {"msg": "set temp_auto"}
 
-@app.put("/set_color") ## wait color from frontend
-def set_color(tree_id: int, color:str):
-    all_tree[tree_id].color = color
-    return {"msg": "set color"}
-
 @app.put("/set_humid_soil")
 def set_humid_soil(tree_id: int, humid_soil:int):
+    if (all_tree[tree_id].mode == 0):
+        raise HTTPException(status_code=400, detail = "cant set humid_soil in manual mode")
     all_tree[tree_id].humid_soil = humid_soil
     return {"msg": "set humid_soil"}
 
 @app.put("/set_humid_air")
 def set_humid_air(tree_id: int, humid_air:int):
+    if (all_tree[tree_id].mode == 0):
+        raise HTTPException(status_code=400, detail = "cant set humid_air in manual mode")
     all_tree[tree_id].humid_air = humid_air
     return {"msg": "set humid_air"}
 
 @app.put("/water")
 def water(tree_id:int, status: bool):
+    if (all_tree[tree_id].mode == 1):
+        raise HTTPException(status_code=400, detail = "cant manually water in auto mode")
     all_tree[tree_id].status_water = status
     return {"msg": "OK"}
 
 @app.put("/humidnify")
 def humidnify_air(tree_id:int, status: bool):
+    if (all_tree[tree_id].mode == 1):
+        raise HTTPException(status_code=400, detail = "cant humidify in auto mode")
     all_tree[tree_id].status_humid = status
     return {"msg": "OK"}
 
 @app.put("/dehumidify")
 def dehumidify(tree_id: int, status: bool):
+    if (all_tree[tree_id].mode == 1):
+        raise HTTPException(status_code=400, detail = "cant dehumidify in auto mode")
     all_tree[tree_id].status_dehumid = status
     return {"msg": "OK"}
