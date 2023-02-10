@@ -30,13 +30,47 @@ class Tree:
 
 all_tree = []
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 0, 25, 25, 0, 0, "#ffffff", 0, 0, 0, 0, 0, 0, False, False, False)
+    temp = Tree(i, 1, 25, 25, 0, 0, "#ffffff", 0, 0, 0, 0, 0, 0, False, False, False)
     all_tree.append(temp)
 
 app = FastAPI()
 
+def update_status():
+    for i in all_tree:
+        if i.mode == 0:
+            if i.temp_now - i.temp_manual > 5:
+                i.status_temp = 1
+            else:
+                i.status_temp = 2
+            return
+
+        if i.temp_now - i.temp_auto > 5:
+            i.status_temp = 1
+        elif i.temp_now - i.temp_auto < 5:
+            i.status_temp = 2
+        else:
+            i.status_temp = 0
+        
+        if i.humid_air_now - i.humid_air > 5:
+            i.status_humid = False
+            i.status_dehumid = True
+        elif i.humid_air_now - i.humid_air < 5:
+            i.status_humid = True
+            i.status_dehumid = False
+        else:
+            i.status_humid = False
+            i.status_dehumid = False
+
+        
+        if i.humid_soil_now - i.humid_soil >= 5:
+            i.status_water = False
+        else:
+            i.status_water = True
+
+
 @app.get("/front")
 def send_status():
+    update_status()
     all = []
     for i in all_tree:
         all.append({"tree_id": i.tree_id, "mode": i.mode, "temp_manual" : i.temp_manual, "temp_auto" : i.temp_auto, "humid_soil": i.humid_soil, "humid_air": i.humid_air, "color": i.color, "intensity": i.intensity,
@@ -45,7 +79,8 @@ def send_status():
     return {"result": all}
 
 @app.get("/hardware")
-def send_status(tree_id: int):
+def send_status():
+    update_status()
     all = []
     for i in all_tree:
         all.append({"tree_id": i.tree_id,"status_temp": i.status_temp, "status_water":i.status_water, "status_humid":i.status_humid, "status_dehumid": i.status_dehumid})
