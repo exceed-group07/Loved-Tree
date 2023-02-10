@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Body, HTTPException
 from typing import Union
+import requests
 
 HOW_MANY_TREE = 2
 
@@ -33,7 +34,7 @@ app = FastAPI()
 
 def update_status():
     for tree in all_tree:
-        tree:Tree
+        tree:Tree         
         if tree.mode == 0:
             if tree.temp_now - tree.temp_manual > 5:
                 tree.status_temp = 1
@@ -246,5 +247,21 @@ def dehumidify(tree_id: int, status: Union[bool, None] = None):
     if x.status_dehumid:
         return {"msg": "DEHUMIDIFIER ON"}
     return {"msg": "DEHUMIDIFIER OFF"}
+
+@app.put("/disco")
+def disco():
+    x = requests.get("http://group7.exceed19.online/front")
+    return (x.json)
+
+@app.delete("/rachata")
+def emoji():
+    for i in range(100):
+        print("😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭")
+
+    return "😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭"
+
+            
+
+        
 
 
