@@ -37,13 +37,15 @@ def update_status():
         if i.mode == 0:
             if i.temp_now - i.temp_manual > 5:
                 i.status_temp = 1
-            else:
+            elif i.temp_now - i.temp_manual < -5:
                 i.status_temp = 2
+            else:
+                i.status_temp = 0
             return
 
         if i.temp_now - i.temp_auto > 5:
             i.status_temp = 1
-        elif i.temp_now - i.temp_auto < 5:
+        elif i.temp_now - i.temp_auto < -5:
             i.status_temp = 2
         else:
             i.status_temp = 0
@@ -51,7 +53,7 @@ def update_status():
         if i.humid_air_now - i.humid_air > 5:
             i.status_humid = False
             i.status_dehumid = True
-        elif i.humid_air_now - i.humid_air < 5:
+        elif i.humid_air_now - i.humid_air < -5:
             i.status_humid = True
             i.status_dehumid = False
         else:
@@ -59,10 +61,13 @@ def update_status():
             i.status_dehumid = False
 
         
-        if i.humid_soil_now - i.humid_soil >= 5:
+        if i.humid_soil_now - i.humid_soil > 5:
             i.status_water = False
-        else:
+        elif i.humid_soil_now - i.humid_soil < -5:
             i.status_water = True
+        else:
+            i.status_water = False
+
 
 for i in range(HOW_MANY_TREE):
     temp = Tree(i, 1, 25, 25, 50, 50, "#ffffff", 100, 25, 50, 50, 0, 100, False, False, False)
