@@ -116,8 +116,10 @@ def set_mode(tree_id: int, mode: Union[int, None] = None):
             x.mode = 1
         else:
             x.mode = 0
-    else:
+    elif mode in range(1):
         x.mode = mode
+    else:
+        raise HTTPException(status_code=400, detail = "mode only have 0(manaul) or 1(auto)")
     return {"msg": "Changed Mode"}
 
 @app.put("/set_intensity")
