@@ -248,13 +248,16 @@ def dehumidify(tree_id: int, status: Union[bool, None] = None):
         return {"msg": "DEHUMIDIFIER ON"}
     return {"msg": "DEHUMIDIFIER OFF"}
 
-@app.put("/disco")
-def disco():
-    x = requests.get("http://group7.exceed19.online/front")
-    return (x.json)
+#@app.put("/disco")
+#def disco():
+    #for ai in range() :
+    #x = requests.get("http://group7.exceed19.online/front")
+    #return (x.json)
 
 @app.get("/rachata")
 def emoji():
+    for i in range(100):
+        print("😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭")
     return "😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭"
 
             
