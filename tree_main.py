@@ -1,8 +1,7 @@
 from fastapi import FastAPI, Body, HTTPException
-from typing import Union, Optional
-from pydantic import BaseModel
+from typing import Union
 
-HOW_MANY_TREE = 1
+HOW_MANY_TREE = 2
 
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: str, intensity: int,
@@ -226,7 +225,7 @@ def humidnify_air(tree_id:int, status: Union[bool, None] = None):
 
     if x.status_humid:
         return {"msg": "HUMIDIFIER ON"}
-    return {"msg": "HUMIDOFIER OFF"}
+    return {"msg": "HUMIDIFIER OFF"}
 
 @app.put("/dehumidify")
 def dehumidify(tree_id: int, status: Union[bool, None] = None):
@@ -246,6 +245,6 @@ def dehumidify(tree_id: int, status: Union[bool, None] = None):
 
     if x.status_dehumid:
         return {"msg": "DEHUMIDIFIER ON"}
-    return {"msg": "DEHUMIDOFIER OFF"}
+    return {"msg": "DEHUMIDIFIER OFF"}
 
 
