@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Body, HTTPException
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 import requests
 
@@ -31,6 +32,15 @@ class Tree:
 all_tree = []
 
 app = FastAPI()
+origins = ["*"]# allow everyone
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def update_status():
     for tree in all_tree:
@@ -74,6 +84,9 @@ for i in range(HOW_MANY_TREE):
     temp = Tree(i, 1, 25, 25, 50, 50, "#ffffff", 100, 25, 50, 50, 0, 100, False, False, False)
     all_tree.append(temp)
 
+@app.get("/")
+def welcome():
+    return "😭😭😭😭Welcome😭😭😭😭"
 
 @app.get("/front")
 def send_status_front():
