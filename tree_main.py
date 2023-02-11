@@ -80,7 +80,7 @@ def update_status():
 
 
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 50, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False)
+    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False)
     all_tree.append(temp)
 
 @app.get("/")
