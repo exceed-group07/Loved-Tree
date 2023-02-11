@@ -80,9 +80,9 @@ def update_status():
             tree.status_dehumid = False
 
         
-        if tree.humid_soil_now - tree.humid_soil > 1:
+        if tree.humid_soil_now - tree.humid_soil > 0:
             tree.status_water = False
-        elif tree.humid_soil_now - tree.humid_soil < -1:
+        elif tree.humid_soil_now - tree.humid_soil < -0:
             tree.status_water = True
         else:
             tree.status_water = False
