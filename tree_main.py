@@ -117,7 +117,7 @@ def send_status_hardware():
 
 @app.put("/hardware_update")    
 def get_hardware_status(status :Tree_get_hardware_status):
-    if tree_id not in range(HOW_MANY_TREE):
+    if status.tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     x = all_tree[status.tree_id]
     x: Tree
