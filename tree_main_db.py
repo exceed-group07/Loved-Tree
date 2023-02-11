@@ -22,7 +22,7 @@ client = MongoClient(f"{MONGO_DB_URL}:{MONGO_DB_PORT}")
 db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
-HOW_MANY_TREE = 3
+HOW_MANY_TREE = 1
 
 class Tree(BaseModel):
     tree_id: int # which tree
@@ -31,7 +31,7 @@ class Tree(BaseModel):
     temp_auto: int # 0 - 100 celcius
     humid_soil: int ######################################33
     humid_air: int # 0 - 100 % ## air humidity
-    color: str # "red", "green", "blue" ## color of RGB
+    color: int # 0 = "red", 1 = "green", 2 = "blue" ## color of RGB
     intensity: int # 0 - 100 ## RGB light intensity
     temp_now: int # 0 - 100 celcius
     humid_soil_now: int ####################################
@@ -99,9 +99,9 @@ def init():
         "mode": 1,
         "temp_manual": 25,
         "temp_auto": 25,
-        "humid_soil": 50,
+        "humid_soil": 5,
         "humid_air": 50,
-        "color": "#ffffff",
+        "color": 0,
         "intensity": 100,
         "temp_now": 25,
         "humid_soil_now": 50,
@@ -130,17 +130,30 @@ def send_status_hardware():
     all = []
     for i in collection.find({}, {"_id": 0}):
         x = dict(i)
-        all.append({"tree_id": x["tree_id"], "status_temp": x["status_temp"], "status_water": x["status_water"],
-                    "status_humid": x["status_humid"], "status_dehumid": x["status_dehumid"], "intensity": x["intensity"], "color": x["color"]})
-    return {"result": all}
+        all.append({"tree_id": x["tree_id"], "status_temp": x["status_temp"], "status_water": int(x["status_water"]),
+                    "status_humid": int(x["status_humid"]), "status_dehumid": int(x["status_dehumid"]), "intensity": x["intensity"], "color": x["color"]})
+    return all[0]
+    #return {"result": all}
 
 @app.put("/hardware_update")    
 def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
 
+    x = collection.find_one({"tree_id": tree_id}, {"_id": 0})
+    if x == None:
+        raise HTTPException(status_code=400, detail = f"Dont have this {tree_id} tree_id")
+    x = dict(x)
+
+    if(humid_soil_now >= 4000):
+        x["humid_soil_now"] = 0
+    elif humid_soil_now == 0:
+        x["humid_soil_now"] = 9
+    else:
+        x["humid_soil_now"] = int((4000-humid_soil_now)//400)
+
     collection.update_one({"tree_id": tree_id}, {"$set": {  "temp_now": temp_now, 
-                                                            "humid_soil_now": humid_soil_now, ####### x.humid_soil_now 0-9 higher is wetter#
+                                                            "humid_soil_now": x["humid_soil_now"], ####### x.humid_soil_now 0-9 higher is wetter#
                                                             "humid_air_now": humid_air_now, 
                                                             "intensity_now": intensity_now}})
     return {"msg": "Update Complete"}
@@ -171,8 +184,8 @@ def set_intensity(tree_id: int, intensity: int):
     collection.update_one({"tree_id": tree_id}, {"$set": {"intensity": intensity}})
     return {"msg": "Changed intensity"}
 
-@app.put("/set_color") ## wait color from frontend
-def set_color(tree_id: int, color:str):
+@app.put("/set_color")
+def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     collection.update_one({"tree_id": tree_id}, {"$set": {"color": color}})
