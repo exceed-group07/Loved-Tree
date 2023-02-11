@@ -1,0 +1,58 @@
+.colorBT{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;;
+    margin-top: 10px;
+}
+
+#red{
+    appearance: none;
+    background-color: #FF0000;
+    height:50px;
+    width: 50px;
+    border-radius: 50%;
+    transition: 0.4s all ease;
+    opacity: 0.4;
+}
+
+#red:checked{
+    opacity: 1;
+}
+
+#red:hover{
+    cursor: pointer;
+}
+
+#green{
+    appearance: none;
+    background-color: #78EB65;
+    height:50px;
+    width: 50px;
+    border-radius: 50%;
+    transition: 0.4s all ease;
+    opacity: 0.4;
+}
+
+#green:checked{
+    opacity: 1;
+}
+#green:hover{
+    cursor: pointer;
+}
+
+#blue{
+    appearance: none;
+    background-color: #2B56FB;
+    height:50px;
+    width: 50px;
+    border-radius: 50%;
+    transition: 0.4s all ease;
+    opacity: 0.4;
+}
+#blue:hover{
+    cursor: pointer;
+}
+
+#blue:checked{
+    opacity: 1;
+}
