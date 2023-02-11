@@ -93,7 +93,7 @@ void GET()
 }
 void PUT()
 {
-    const String url = baseUrl + "hardwareupdate";
+    const String url = baseUrl + "hardware_update";
     DynamicJsonDocument doc(2048);
     String json;
     // populate doc
@@ -115,6 +115,7 @@ void PUT()
     {
         Serial.println("PUT ERROR");
     }
+    delay(1000);
 }
 
 void setup()
@@ -125,13 +126,11 @@ void setup()
   // Initialize device.
   dht.begin();
 
-  sensor_t sensor;
-  // Set delay between sensor readings based on sensor details.
+  sensor_t sensor;  // Set delay between sensor readings based on sensor details.
   delayMS = sensor.min_delay / 1000;
 
   //SOIL
-  pinMode(sensorPower, OUTPUT);
-  // Initially keep the sensor OFF
+  pinMode(sensorPower, OUTPUT);  // Initially keep the sensor OFF
   digitalWrite(sensorPower, LOW);
 
 
@@ -161,7 +160,6 @@ void setup()
 
 void gettemp(void *param){
   while(1){
-    // GET
   GET();
   //AIR
   delay(delayMS);
@@ -174,9 +172,9 @@ void gettemp(void *param){
   }
   else 
   {
-    Serial.print(F("Temperature : "));
     Temp = event.temperature;
-    Serial.print(event.temperature);
+    Serial.print(F("Temperature : "));
+    Serial.print(Temp);
     Serial.println(F("°C"));
   }
   // Get humidity event and print its value.
@@ -187,15 +185,14 @@ void gettemp(void *param){
   }
   else 
   {
-    Serial.print(F("Humidity : "));
     HmdtAir = event.relative_humidity;
-    Serial.print(event.relative_humidity);
+    Serial.print(F("Humidity : "));
+    Serial.print(HmdtAir);
     Serial.println(F("%"));
   }
 
 
   //SOIL
-    //get the reading from the function below and print it
   moisture = readSensor();
   Serial.print("moisture[0 - 4095] : ");
   Serial.println(moisture);
@@ -209,13 +206,13 @@ void gettemp(void *param){
       if (color == 0)
       {
         // RIGHT
-        Serial.print("RED Right : ");
+        Serial.print("RED Right intensit : ");
         Serial.println(intensity);
         analogWrite(2, intensity); //red
         analogWrite(15, 0); //blue
         analogWrite(0, 0);//green
         // LEFT
-        Serial.print("RED Left : ");
+        Serial.print("RED Left intensit : ");
         Serial.println(intensity);
         analogWrite(25, intensity); //red
         analogWrite(26, 0); //blue
@@ -227,13 +224,13 @@ void gettemp(void *param){
       if (color == 1)
       {
         // RIGHT
-        Serial.print("RED Right : ");
+        Serial.print("GREEN Right intensit : ");
         Serial.println(intensity);
         analogWrite(2, 0);
         analogWrite(15, 0); 
         analogWrite(0, intensity); 
         // LEFT
-        Serial.print("RED Left : ");
+        Serial.print("GREEN Left intensit : ");
         Serial.println(intensity);
         analogWrite(25, 0);
         analogWrite(26, 0); 
@@ -246,13 +243,13 @@ void gettemp(void *param){
       if (color == 2)
       {
         // RIGHT
-        Serial.print("RED Right : ");
+        Serial.print("BLUE Right intensit : ");
         Serial.println(intensity);
         analogWrite(2, 0);
         analogWrite(15, intensity); 
         analogWrite(0, 0);
         // LEFT
-        Serial.print("RED Left : ");
+        Serial.print("BLUE Left intensit : ");
         Serial.println(intensity);
         analogWrite(25, 0);
         analogWrite(26, intensity); 
@@ -263,56 +260,66 @@ void gettemp(void *param){
 
   //LED
   // RED2
-  Serial.print("status_temp [RED2] : ");
-  Serial.println(status_temp);
+  // Serial.print("status_temp [RED2] : ");
+  // Serial.println(status_temp);
   if (status_temp == 0)
   {
     ledcWrite(1, 0);
+    Serial.println("RED1");
   }
   else
   {
-    ledcWrite(1, 255);
+    ledcWrite(1, 100);
+    Serial.println("RED1 Temp WORKING");
+    
   }
 
   // YELLOW
-  Serial.print("status_water [YELLOW] : ");
-  Serial.println(status_water);
+  // Serial.print("status_water [YELLOW] : ");
+  // Serial.println(status_water);
   if (status_water == 0)
   {
     ledcWrite(2, 0);
+    Serial.println("YELLOW");
   }
   else
   {
-    ledcWrite(2, 255);
+    ledcWrite(2, 100);
+    Serial.println("YELLOW START WATERING");
   }
 
   // GREEN
-  Serial.print("status_humid [GREEN] : ");
-  Serial.println(status_humid);
+  // Serial.print("status_humid [GREEN] : ");
+  // Serial.println(status_humid);
   if (status_humid == 0)
   {
     ledcWrite(3, 0);
+    Serial.println("GREEN");
   }
   else
   {
-    ledcWrite(3, 255);
+    ledcWrite(3, 100);
+    Serial.println("GREEN START FOGGY");
   }
   // RED1
-  Serial.print("status_dehumid [RED1] : ");
-  Serial.println(status_dehumid);
+  // Serial.print("status_dehumid [RED1] : ");
+  // Serial.println(status_dehumid);
   if (status_dehumid == 0)
   {
     ledcWrite(0, 0);
+    Serial.println("RED1");
   }
   else
   {
-    ledcWrite(0, 255);
+    ledcWrite(0, 100);
+    Serial.println("RED1 START DRY");
   }
 
     //LDR
-    Serial.print("LDR [0 - 100] = ");
     LDR_value = map(analogRead(LDR),1000,4095,0,100);
-    Serial.println(LDR_value);
+    Serial.print("LDR [0 - 100] = ");
+    Serial.print(LDR_value);
+    Serial.println("/100");
     delay(1000);
   }
 }
