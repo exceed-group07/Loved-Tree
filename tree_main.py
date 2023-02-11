@@ -54,17 +54,17 @@ def update_status():
     for tree in all_tree:
         tree:Tree         
         if tree.mode == 0:
-            if tree.temp_now - tree.temp_manual > 5:
+            if tree.temp_now - tree.temp_manual > 3:
                 tree.status_temp = 1
-            elif tree.temp_now - tree.temp_manual < -5:
+            elif tree.temp_now - tree.temp_manual < -3:
                 tree.status_temp = 2
             else:
                 tree.status_temp = 0
             return
 
-        if tree.temp_now - tree.temp_auto > 5:
+        if tree.temp_now - tree.temp_auto > 3:
             tree.status_temp = 1
-        elif tree.temp_now - tree.temp_auto < -5:
+        elif tree.temp_now - tree.temp_auto < -3:
             tree.status_temp = 2
         else:
             tree.status_temp = 0
@@ -87,9 +87,9 @@ def update_status():
         else:
             tree.status_water = False
         
-        if tree.intensity_now - tree.intensity > 5:###############
+        if tree.intensity_now - tree.intensity > 5:
             tree.status_intensity = 2
-        elif tree.intensity_now - tree.intensity < -5:###############
+        elif tree.intensity_now - tree.intensity < -5:
             tree.status_intensity = 1
         else:
             tree.status_intensity = 0
