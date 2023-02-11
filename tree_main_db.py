@@ -22,7 +22,7 @@ client = MongoClient(f"{MONGO_DB_URL}:{MONGO_DB_PORT}")
 db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
-HOW_MANY_TREE = 3
+HOW_MANY_TREE = 1
 
 class Tree(BaseModel):
     tree_id: int # which tree
