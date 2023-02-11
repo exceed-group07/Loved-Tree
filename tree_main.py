@@ -5,7 +5,7 @@ from typing import Union
 HOW_MANY_TREE = 1
 
 class Tree:
-    def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: str, intensity: int,
+    def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: int, intensity: int,
                     temp_now: int, humid_soil_now: int, humid_air_now: int, 
                     status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool):
         self.tree_id = tree_id # which tree
@@ -14,7 +14,7 @@ class Tree:
         self.temp_auto = temp_auto # 0 - 100 celcius
         self.humid_soil = humid_soil # level 0-9 higher is weter
         self.humid_air = humid_air # 0 - 100 % ## air humidity
-        self.color = color # "red", "green", "blue" ## color of RGB
+        self.color = color # 0,1,2 for RGB color
         self.intensity = intensity # 0 - 100 ## RGB light intensity
 
         self.temp_now = temp_now # 0 - 100 celcius
@@ -80,7 +80,7 @@ def update_status():
 
 
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 50, 50, "#ffffff", 100, 25, 50, 50, 0, 100, False, False, False)
+    temp = Tree(i, 1, 25, 25, 50, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False)
     all_tree.append(temp)
 
 @app.get("/")
@@ -149,7 +149,7 @@ def set_intensity(tree_id: int, intensity: int):
     return {"msg": "Changed intensity"}
 
 @app.put("/set_color") ## wait color from frontend
-def set_color(tree_id: int, color:str):
+def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
     x = all_tree[tree_id]
