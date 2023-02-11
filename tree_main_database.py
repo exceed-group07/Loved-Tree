@@ -41,7 +41,7 @@ class Tree(BaseModel):
     status_water:bool # False = OFF, TTrue = ON ## humidifier
     status_dehumid:bool # False = OFF, True = ON ## dehumid_humidifier
     status_humid: bool # False = OFF, 
-    status_intensity:int
+    status_intensity: int
 
 app = FastAPI()
 
@@ -66,6 +66,7 @@ def update_status():
                 x["status_temp"] = 2
             else:
                 x["status_temp"] = 0
+            collection.update_one({"tree_id": x["tree_id"]}, {"$set": {"status_temp": x["status_temp"]}})
             return
 
         if x["temp_now"] - x["temp_auto"] > 3:
@@ -99,6 +100,12 @@ def update_status():
         else:
             x["status_intensity"] = 0
 
+        collection.update_one({"tree_id": x["tree_id"]}, {"$set": {   "status_temp": x["status_temp"], 
+                                                                    "status_humid": x["status_humid"],
+                                                                    "status_dehumid": x["status_humid"],
+                                                                    "status_water": x["status_water"],
+                                                                    "status_intensity": x["status_intensity"]}})
+
 def init():
     for i in range(HOW_MANY_TREE):
         collection.insert_one({
@@ -118,11 +125,11 @@ def init():
         "status_water": False,
         "status_humid": False,
         "status_dehumid": False,
-        "intensity_now": 0
+        "status_intensity": 0
     })
 
-#collection.delete_many({})
-#init()
+collection.delete_many({})
+init()
 
 @app.get("/front")
 def send_status_front():
