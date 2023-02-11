@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
+from pydantic import BaseModel
 
 HOW_MANY_TREE = 1
+
 
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: int, intensity: int,
@@ -26,7 +28,13 @@ class Tree:
         self.status_water = status_water # False = OFF, True = ON ## tree water
         self.status_humid = status_water_air # False = OFF, True = ON ## humidifier
         self.status_dehumid = status_dehumid # False = OFF, True = ON ## dehumid_humidifier
-        
+
+class Tree_get_hardware_status(BaseModel):
+    tree_id: int
+    temp_now: int
+    humid_soil_now:int
+    humid_air_now:int
+    intensity_now:int      
 
 all_tree = []
 
@@ -108,21 +116,21 @@ def send_status_hardware():
     return all[0]
 
 @app.put("/hardware_update")    
-def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
+def get_hardware_status(status :Tree_get_hardware_status):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
-    x = all_tree[tree_id]
+    x = all_tree[status.tree_id]
     x: Tree
-    x.temp_now = temp_now
-    x.humid_air_now = humid_air_now
-    x.intensity_now = intensity_now
+    x.temp_now = status.temp_now
+    x.humid_air_now = status.humid_air_now
+    x.intensity_now = status.intensity_now
 
-    if(humid_soil_now >= 4000):
+    if(status.humid_soil_now >= 4000):
         x.humid_soil_now = 0
-    elif humid_soil_now == 0:
+    elif status.humid_soil_now == 0:
         x.humid_soil_now = 9
     else:
-        x.humid_soil_now = int((4000-humid_soil_now)//400)
+        x.humid_soil_now = int((4000-status.humid_soil_now)//400)
 
     return {"msg": "Update Complete"}
 
