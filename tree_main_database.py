@@ -86,9 +86,9 @@ def update_status():
             x["status_humid"] = False
             x["status_dehumid"] = False
 
-        if x["humid_soil_now"] - x["humid_soil"] > 5: ############ change the number 5
+        if x["humid_soil_now"] - x["humid_soil"] > 1:
             x["status_water"] = True
-        elif x["humid_soil_now"] - x["humid_soil"] < -5: ############ change the number 5
+        elif x["humid_soil_now"] - x["humid_soil"] < -1:
             x["status_water"] = False
         else:
             x["status_water"] = False
@@ -100,7 +100,7 @@ def update_status():
         else:
             x["status_intensity"] = 0
 
-        collection.update_one({"tree_id": x["tree_id"]}, {"$set": {   "status_temp": x["status_temp"], 
+        collection.update_one({"tree_id": x["tree_id"]}, {"$set": { "status_temp": x["status_temp"], 
                                                                     "status_humid": x["status_humid"],
                                                                     "status_dehumid": x["status_humid"],
                                                                     "status_water": x["status_water"],
