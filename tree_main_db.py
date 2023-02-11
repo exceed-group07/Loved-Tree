@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from pymongo import MongoClient
@@ -41,6 +41,7 @@ class Tree(BaseModel):
     status_water:bool # False = OFF, TTrue = ON ## humidifier
     status_dehumid:bool # False = OFF, True = ON ## dehumid_humidifier
     status_humid: bool # False = OFF, 
+    status_intensity:int
 
 app = FastAPI()
 
@@ -59,17 +60,17 @@ def update_status():
     for i in collection.find({}):
         x = dict(i)  
         if x["mode"] == 0:
-            if x["temp_now"] - x["temp_manual"] > 5:
+            if x["temp_now"] - x["temp_manual"] > 3:
                 x["status_temp"] = 1
-            elif x["temp_now"] - x["temp_manual"] < -5:
+            elif x["temp_now"] - x["temp_manual"] < -3:
                 x["status_temp"] = 2
             else:
                 x["status_temp"] = 0
             return
 
-        if x["temp_now"] - x["temp_auto"] > 5:
+        if x["temp_now"] - x["temp_auto"] > 3:
             x["status_temp"] = 1
-        elif x["temp_now"] - x["temp_auto"] < -5:
+        elif x["temp_now"] - x["temp_auto"] < -3:
             x["status_temp"] = 2
         else:
             x["status_temp"] = 0
@@ -84,13 +85,19 @@ def update_status():
             x["status_humid"] = False
             x["status_dehumid"] = False
 
-        
         if x["humid_soil_now"] - x["humid_soil"] > 5: ############ change the number 5
             x["status_water"] = True
         elif x["humid_soil_now"] - x["humid_soil"] < -5: ############ change the number 5
             x["status_water"] = False
         else:
             x["status_water"] = False
+
+        if x["intensity_now"] - x["intensity"] > 5:
+            x["status_intensity"] = 2
+        elif x["intensity_now"] - x["intensity"] < -5:
+            x["status_intensity"] = 1
+        else:
+            x["status_intensity"] = 0
 
 def init():
     for i in range(HOW_MANY_TREE):
@@ -110,7 +117,8 @@ def init():
         "status_temp": 100,
         "status_water": False,
         "status_humid": False,
-        "status_dehumid": False
+        "status_dehumid": False,
+        "intensity_now": 0
     })
 
 #collection.delete_many({})
@@ -130,13 +138,13 @@ def send_status_hardware():
     all = []
     for i in collection.find({}, {"_id": 0}):
         x = dict(i)
-        all.append({"tree_id": x["tree_id"], "status_temp": x["status_temp"], "status_water": int(x["status_water"]),
-                    "status_humid": int(x["status_humid"]), "status_dehumid": int(x["status_dehumid"]), "intensity": x["intensity"], "color": x["color"]})
+        all.append({"tree_id": x["tree_id"], "status_temp": x["status_temp"], "status_water": int(x["status_water"]), "status_humid": int(x["status_humid"]), 
+                    "status_dehumid": int(x["status_dehumid"]), "intensity": x["intensity"], "color": x["color"], "status_intensity": x["status_intensity"]})
     return all[0]
     #return {"result": all}
 
 @app.put("/hardware_update")    
-def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
+def get_hardware_status(tree_id = Body(), temp_now = Body(), humid_soil_now = Body(), humid_air_now = Body(), intensity_now = Body()):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
 
