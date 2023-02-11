@@ -2,6 +2,7 @@ import "../styles/InputBar.css"
 import temp from "../icons/temp.png"
 import { useState } from "react";
 import axios from "axios";
+const URL = "http://group7.exceed19.online"
 function Manualbar(props) {
     const { manual } = props
     const [inputs, setInputs] = useState({
