@@ -105,7 +105,7 @@ def send_status_hardware():
     for tree in all_tree:
         tree:Tree
         all.append({"tree_id": tree.tree_id,"status_temp": tree.status_temp, "status_water":tree.status_water, "status_humid":tree.status_humid, "status_dehumid": tree.status_dehumid,"intensity":tree.intensity,"color":tree.color})
-    return {"result": all}
+    return all[0]
 
 @app.put("/hardware_update")    
 def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
