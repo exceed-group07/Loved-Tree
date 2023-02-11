@@ -87,3 +87,8 @@ body {
     padding-bottom: 80px;
     padding-left: 20px;
 }
+
+.disabled {
+    opacity: 50%;
+    color: lightgray;
+}

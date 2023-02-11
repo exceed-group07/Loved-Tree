@@ -1,4 +1,4 @@
-.circle1{
+.circle1 {
     position: absolute;
     width: 204px;
     height: 204px;
@@ -7,9 +7,13 @@
 
     background: #FFFFFF;
     box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
-    border-radius: 50%;}
+    border-radius: 50%;
+    cursor: pointer;
+}
 
-.circle2{
+
+
+.circle2 {
     position: absolute;
     width: 204px;
     height: 204px;
@@ -19,18 +23,62 @@
     background: #FFFFFF;
     box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
     border-radius: 50%;
+    cursor: pointer;
 }
 
-.circle1 img{
-    margin:auto;
+.circle1 img {
+    margin: auto;
     justify-content: center;
     padding-left: 50px;
     padding-top: 45px;
 }
 
-.circle2 img{
-    margin:auto;
+.circle2 img {
+    margin: auto;
     justify-content: center;
     padding-left: 40px;
     padding-top: 50px;
+}
+
+.circle1 :active {
+    opacity: 0.6;
+}
+
+.circle2 :active {
+    opacity: 0.6;
+}
+
+.DWbt {
+    position: absolute;
+    top: 825px;
+    left: 800px;
+    height: 100vh;
+}
+
+.circle1_active {
+    position: absolute;
+    width: 204px;
+    height: 204px;
+    left: 744px;
+    top: 582px;
+
+    background: #2B56FB;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+
+.circle2_active {
+    position: absolute;
+    width: 204px;
+    height: 204px;
+    left: 1010px;
+    top: 581px;
+
+    background: #2B56FB;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    cursor: pointer;
 }
