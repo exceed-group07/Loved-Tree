@@ -1,0 +1,16 @@
+{
+    "folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "Loved_Tree_Hardware",
+			"path": ".."
+		},
+		{
+			"name": "Temp&Humidity",
+			"path": "../../Test/Temp&Humidity"
+		}
+	],
+    "settings": {}
+}
