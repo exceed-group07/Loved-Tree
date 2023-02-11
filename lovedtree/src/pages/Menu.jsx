@@ -36,6 +36,7 @@ function Menu() {
     const status = (bool) => {
 
         bool == "dry" ? setHumid(true) : setHumid(false)
+        console.log(humid)
     }
 
     const plants = (waters) => {

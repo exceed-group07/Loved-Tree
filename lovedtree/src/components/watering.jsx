@@ -8,7 +8,7 @@ import axios from "axios"
 function Watering(props) {
     const {status, humid, st, plant,tree,water_status,sprinkle_status} = props
     const [water, setWaters] = useState({
-        status_water : Boolean
+        status: Boolean
     })
     const [humids, setHumid] = useState({
         status_dehumid : Boolean
@@ -17,15 +17,19 @@ function Watering(props) {
 
     const handleOptionChange = (e) => {
         const newHumid = e.target.value; 
-      
-        axios.put('http://group7.exceed19.online/set_mode', null, {
+        let status_test = false
+        if (newHumid === 'dry'){
+            status_test = true
+        }
+        axios.put('http://group7.exceed19.online/dehumidify', null, {
             params: {
                 tree_id: 0,
-                status_dehumid : newHumid
+                status: status_test
             }
         }).then(response => {
           setHumid(newHumid);
           st(newHumid)
+          console.log(newHumid)
         }).catch(error => {
           console.error(error);
         });
@@ -33,7 +37,7 @@ function Watering(props) {
 
       const handleStatusChange = (e) => {
         const newWater = !water_status; 
-        axios.put('http://group7.exceed19.online/water', null, {
+        axios.put('http://group7.exceed19.online/humidnify', null, {
             params: {
                 tree_id: 0,
                 status : newWater
