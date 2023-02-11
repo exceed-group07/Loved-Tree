@@ -9,7 +9,7 @@ HOW_MANY_TREE = 1
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: int, intensity: int,
                     temp_now: int, humid_soil_now: int, humid_air_now: int, 
-                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool):
+                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool,status_intensity:int):
         self.tree_id = tree_id # which tree
         self.mode = mode # 0 = manual, 1 = auto
         self.temp_manual = temp_manual # 0 - 100 celcius
@@ -28,6 +28,7 @@ class Tree:
         self.status_water = status_water # False = OFF, True = ON ## tree water
         self.status_humid = status_water_air # False = OFF, True = ON ## humidifier
         self.status_dehumid = status_dehumid # False = OFF, True = ON ## dehumid_humidifier
+        self.status_intensity = status_intensity # 0 = okay ,1 = too little ,2 = too much
 
 class Tree_get_hardware_status(BaseModel):
     tree_id: int
@@ -85,10 +86,17 @@ def update_status():
             tree.status_water = True
         else:
             tree.status_water = False
+        
+        if tree.intensity_now - tree.intensity > 5:###############
+            tree.status_intensity = 2
+        elif tree.intensity_now - tree.intensity < -5:###############
+            tree.status_intensity = 1
+        else:
+            tree.status_intensity = 0
 
 
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False)
+    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False,0)
     all_tree.append(temp)
 
 @app.get("/")
@@ -103,7 +111,7 @@ def send_status_front():
         tree:Tree
         all.append({"tree_id": tree.tree_id, "mode": tree.mode, "temp_manual" : tree.temp_manual, "temp_auto" : tree.temp_auto, "humid_soil": tree.humid_soil, "humid_air": tree.humid_air, "color": tree.color, "intensity": tree.intensity,
                     "temp_now": tree.temp_now, "humid_soil_now": tree.humid_soil_now, "humid_air_now": tree.humid_air_now, 
-                    "intensity_now": tree.intensity_now, "status_temp": tree.status_temp, "status_water": tree.status_water, "status_humid": tree.status_humid, "status_dehumid": tree.status_dehumid})
+                    "intensity_now": tree.intensity_now, "status_temp": tree.status_temp, "status_water": tree.status_water, "status_humid": tree.status_humid, "status_dehumid": tree.status_dehumid,"status_intensity":tree.status_intensity})
     return {"result": all}
 
 @app.get("/hardware")
