@@ -1,13 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
+from pydantic import BaseModel
 
 HOW_MANY_TREE = 1
+
 
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: int, intensity: int,
                     temp_now: int, humid_soil_now: int, humid_air_now: int, 
-                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool):
+                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool,status_intensity:int):
         self.tree_id = tree_id # which tree
         self.mode = mode # 0 = manual, 1 = auto
         self.temp_manual = temp_manual # 0 - 100 celcius
@@ -26,7 +28,14 @@ class Tree:
         self.status_water = status_water # False = OFF, True = ON ## tree water
         self.status_humid = status_water_air # False = OFF, True = ON ## humidifier
         self.status_dehumid = status_dehumid # False = OFF, True = ON ## dehumid_humidifier
-        
+        self.status_intensity = status_intensity # 0 = okay ,1 = too little ,2 = too much
+
+class Tree_get_hardware_status(BaseModel):
+    tree_id: int
+    temp_now: int
+    humid_soil_now:int
+    humid_air_now:int
+    intensity_now:int      
 
 all_tree = []
 
@@ -45,17 +54,17 @@ def update_status():
     for tree in all_tree:
         tree:Tree         
         if tree.mode == 0:
-            if tree.temp_now - tree.temp_manual > 5:
+            if tree.temp_now - tree.temp_manual > 3:
                 tree.status_temp = 1
-            elif tree.temp_now - tree.temp_manual < -5:
+            elif tree.temp_now - tree.temp_manual < -3:
                 tree.status_temp = 2
             else:
                 tree.status_temp = 0
             return
 
-        if tree.temp_now - tree.temp_auto > 5:
+        if tree.temp_now - tree.temp_auto > 3:
             tree.status_temp = 1
-        elif tree.temp_now - tree.temp_auto < -5:
+        elif tree.temp_now - tree.temp_auto < -3:
             tree.status_temp = 2
         else:
             tree.status_temp = 0
@@ -77,10 +86,17 @@ def update_status():
             tree.status_water = True
         else:
             tree.status_water = False
+        
+        if tree.intensity_now - tree.intensity > 5:
+            tree.status_intensity = 2
+        elif tree.intensity_now - tree.intensity < -5:
+            tree.status_intensity = 1
+        else:
+            tree.status_intensity = 0
 
 
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False)
+    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False,0)
     all_tree.append(temp)
 
 @app.get("/")
@@ -95,7 +111,7 @@ def send_status_front():
         tree:Tree
         all.append({"tree_id": tree.tree_id, "mode": tree.mode, "temp_manual" : tree.temp_manual, "temp_auto" : tree.temp_auto, "humid_soil": tree.humid_soil, "humid_air": tree.humid_air, "color": tree.color, "intensity": tree.intensity,
                     "temp_now": tree.temp_now, "humid_soil_now": tree.humid_soil_now, "humid_air_now": tree.humid_air_now, 
-                    "intensity_now": tree.intensity_now, "status_temp": tree.status_temp, "status_water": tree.status_water, "status_humid": tree.status_humid, "status_dehumid": tree.status_dehumid})
+                    "intensity_now": tree.intensity_now, "status_temp": tree.status_temp, "status_water": tree.status_water, "status_humid": tree.status_humid, "status_dehumid": tree.status_dehumid,"status_intensity":tree.status_intensity})
     return {"result": all}
 
 @app.get("/hardware")
@@ -108,21 +124,21 @@ def send_status_hardware():
     return all[0]
 
 @app.put("/hardware_update")    
-def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_air_now: int, intensity_now: int):
-    if tree_id not in range(HOW_MANY_TREE):
+def get_hardware_status(status :Tree_get_hardware_status):
+    if status.tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
-    x = all_tree[tree_id]
+    x = all_tree[status.tree_id]
     x: Tree
-    x.temp_now = temp_now
-    x.humid_air_now = humid_air_now
-    x.intensity_now = intensity_now
+    x.temp_now = status.temp_now
+    x.humid_air_now = status.humid_air_now
+    x.intensity_now = status.intensity_now
 
-    if(humid_soil_now >= 4000):
+    if(status.humid_soil_now >= 4000):
         x.humid_soil_now = 0
-    elif humid_soil_now == 0:
+    elif status.humid_soil_now == 0:
         x.humid_soil_now = 9
     else:
-        x.humid_soil_now = int((4000-humid_soil_now)//400)
+        x.humid_soil_now = int((4000-status.humid_soil_now)//400)
 
     return {"msg": "Update Complete"}
 
