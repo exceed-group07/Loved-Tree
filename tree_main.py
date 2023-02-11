@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
-import requests
 
 HOW_MANY_TREE = 1
 
@@ -30,8 +29,6 @@ class Tree:
         
 
 all_tree = []
-
-#### HELLO WORLD
 
 app = FastAPI()
 origins = ["*"]# allow everyone
@@ -263,12 +260,7 @@ def dehumidify(tree_id: int, status: Union[bool, None] = None):
     if x.status_dehumid:
         return {"msg": "DEHUMIDIFIER ON"}
     return {"msg": "DEHUMIDIFIER OFF"}
-
-@app.put("/disco")
-#def disco():
-    #for ai in range() :
-    #x = requests.get("http://group7.exceed19.online/front")
-    #return (x.json)
+    
 
 @app.get("/rachata")
 def emoji():
