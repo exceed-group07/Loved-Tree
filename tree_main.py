@@ -120,7 +120,7 @@ def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_
     if(humid_soil_now >= 4000):
         x.humid_soil_now = 0
     else:
-        x.humid_soil_now = int((4000-humid_air_now)//400)
+        x.humid_soil_now = int((4000-humid_soil_now)//400)
 
     return {"msg": "Update Complete"}
 
