@@ -1,0 +1,36 @@
+.circle1{
+    position: absolute;
+    width: 204px;
+    height: 204px;
+    left: 744px;
+    top: 582px;
+
+    background: #FFFFFF;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;}
+
+.circle2{
+    position: absolute;
+    width: 204px;
+    height: 204px;
+    left: 1010px;
+    top: 581px;
+
+    background: #FFFFFF;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+}
+
+.circle1 img{
+    margin:auto;
+    justify-content: center;
+    padding-left: 50px;
+    padding-top: 45px;
+}
+
+.circle2 img{
+    margin:auto;
+    justify-content: center;
+    padding-left: 40px;
+    padding-top: 50px;
+}
