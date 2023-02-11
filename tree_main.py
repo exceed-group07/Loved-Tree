@@ -114,10 +114,13 @@ def get_hardware_status(tree_id: int, temp_now: int, humid_soil_now: int, humid_
     x = all_tree[tree_id]
     x: Tree
     x.temp_now = temp_now
-    # humid_soil_now higher is dryer # x.humid_soil_now 0-9 higher is wetter#
-    x.humid_soil_now = humid_soil_now################################ need to make into level from 0 to 9???
     x.humid_air_now = humid_air_now
     x.intensity_now = intensity_now
+
+    if(humid_air_now >= 4000):
+        x.humid_soil_now = 0
+    else:
+        x.humid_soil_now = int((4000-humid_air_now)//400)
 
     return {"msg": "Update Complete"}
 
@@ -148,7 +151,7 @@ def set_intensity(tree_id: int, intensity: int):
     x.intensity = intensity
     return {"msg": "Changed intensity"}
 
-@app.put("/set_color") ## wait color from frontend
+@app.put("/set_color")
 def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
