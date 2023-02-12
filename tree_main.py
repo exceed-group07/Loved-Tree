@@ -87,9 +87,9 @@ def update_status():
         else:
             tree.status_water = False
         
-        if tree.intensity_now - tree.intensity > 5:
+        if tree.intensity_now - tree.intensity > 20:
             tree.status_intensity = 2
-        elif tree.intensity_now - tree.intensity < -5:
+        elif tree.intensity_now - tree.intensity < -20:
             tree.status_intensity = 1
         else:
             tree.status_intensity = 0
