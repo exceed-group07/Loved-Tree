@@ -4,7 +4,7 @@ import "../styles/Status.css"
 
 
 function Intensitystatus() {
-    const [light, setLight] = useState(0)
+    const [light, setLight] = useState("0")
 
     useEffect(() => {
         FetchData().then(result => setLight(result.result[0].status_intensity))
@@ -35,13 +35,13 @@ function Intensitystatus() {
             
             
         
-      }, 3000);
+      }, 5000);
 
 
     return (
         <div className="intensity-div">
             <div>
-                {light === 0 ? "Normal status" : light === 1 ? "Too dark" : "Too bright"}
+                {light === 0 ? "Normal" : light === 1 ? "Too dark" : "Too bright"}
             </div>
         </div>
     )
