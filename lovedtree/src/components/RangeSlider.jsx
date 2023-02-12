@@ -4,7 +4,6 @@ import FetchData from "../api/Fetchdata";
 import axios from "axios";
 const RangeSlider = () => {
     const [value, setValue] = useState(50);
-    var t
     useEffect(() => {
         FetchData().then(result => setValue(result.result[0].intensity))
 

@@ -1,0 +1,19 @@
+.intensity > div {
+    background: #FFFFFF;
+    box-shadow: 3px 4px 18px rgba(0, 0, 0, 0.1);
+    border-radius: 70px;
+    font-size: 60px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    font-family: "PT Sans", Calibri, Tahoma, sans-serif;
+    font-weight: bold;
+    width: 500px;
+}
+
+.intensity-div {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-top: 5px;
+}
