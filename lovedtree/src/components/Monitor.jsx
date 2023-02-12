@@ -38,7 +38,7 @@ function Monitors() {
             
             
         
-      }, 3000);
+      }, 5000);
 
     return (
         <div className="monitor">
