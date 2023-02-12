@@ -88,14 +88,12 @@ def update_status():
 
         if x["humid_soil_now"] - x["humid_soil"] > 0:
             x["status_water"] = True
-        elif x["humid_soil_now"] - x["humid_soil"] < 0:
-            x["status_water"] = False
         else:
             x["status_water"] = False
 
-        if x["intensity_now"] - x["intensity"] > 5:
+        if x["intensity_now"] - x["intensity"] > 20:
             x["status_intensity"] = 2
-        elif x["intensity_now"] - x["intensity"] < -5:
+        elif x["intensity_now"] - x["intensity"] < -20:
             x["status_intensity"] = 1
         else:
             x["status_intensity"] = 0
