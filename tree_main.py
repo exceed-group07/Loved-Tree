@@ -9,7 +9,7 @@ HOW_MANY_TREE = 1
 class Tree:
     def __init__(   self, tree_id: int, mode: int, temp_manual : int, temp_auto: int, humid_soil: int, humid_air: int, color: int, intensity: int,
                     temp_now: int, humid_soil_now: int, humid_air_now: int, 
-                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool,status_intensity:int):
+                    status_temp: int,intensity_now:int, status_water:bool, status_water_air:bool, status_dehumid: bool,status_intensity:int,intensity_want:int):
         self.tree_id = tree_id # which tree
         self.mode = mode # 0 = manual, 1 = auto
         self.temp_manual = temp_manual # 0 - 100 celcius
@@ -22,7 +22,8 @@ class Tree:
         self.temp_now = temp_now # 0 - 100 celcius
         self.humid_soil_now = humid_soil_now # level 0-9 higher is weter
         self.humid_air_now = humid_air_now # 0 - 100 % ## air humidity
-        self.intensity_now = intensity_now # 
+        self.intensity_now = intensity_now #
+        self.intensity_want =  intensity_want ##
 
         self.status_temp = status_temp # 0 = OFF, 1 = decrese_temp, 2 = increase_temp
         self.status_water = status_water # False = OFF, True = ON ## tree water
@@ -87,16 +88,17 @@ def update_status():
         else:
             tree.status_water = False
         
-        if tree.intensity_now - tree.intensity > 5:
+        tree.intensity_want = tree.intensity
+        if tree.intensity_now - tree.intensity_want > 20:
             tree.status_intensity = 2
-        elif tree.intensity_now - tree.intensity < -5:
+        elif tree.intensity_now - tree.intensity_want < -20:
             tree.status_intensity = 1
         else:
             tree.status_intensity = 0
 
 
 for i in range(HOW_MANY_TREE):
-    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False,0)
+    temp = Tree(i, 1, 25, 25, 5, 50, 0, 100, 25, 50, 50, 0, 100, False, False, False,0,0)
     all_tree.append(temp)
 
 @app.get("/")
@@ -168,6 +170,15 @@ def set_intensity(tree_id: int, intensity: int):
     x: Tree
     x.intensity = intensity
     return {"msg": "Changed intensity"}
+
+@app.put("/set_intensity_want")
+def set_intensity(tree_id: int, intensity_want: int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
+    x = all_tree[tree_id]
+    x: Tree
+    x.intensity_want = intensity_want
+    return {"msg": "Changed intensity_want"}
 
 @app.put("/set_color")
 def set_color(tree_id: int, color:int):
