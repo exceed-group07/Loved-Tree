@@ -29,19 +29,20 @@ class Tree(BaseModel):
     mode: int # 0 = manual, 1 = auto
     temp_manual: int # 0 - 100 celcius
     temp_auto: int # 0 - 100 celcius
-    humid_soil: int ######################################33
+    humid_soil: int # level 0-9 higher is weter
     humid_air: int # 0 - 100 % ## air humidity
     color: int # 0 = "red", 1 = "green", 2 = "blue" ## color of RGB
     intensity: int # 0 - 100 ## RGB light intensity
     temp_now: int # 0 - 100 celcius
-    humid_soil_now: int ####################################
+    humid_soil_now: int # level 0-9 higher is weter
     humid_air_now: int # 0 - 100 % ## air humidity
     intensity_now: int #
+    intensity_want: int
     status_temp:int # 0 = OFF, 1 = decrese_temp, 2 = increase_temp
     status_water:bool # False = OFF, TTrue = ON ## humidifier
     status_dehumid:bool # False = OFF, True = ON ## dehumid_humidifier
     status_humid: bool # False = OFF, 
-    status_intensity: int
+    status_intensity: int # 0 = okay ,1 = too little ,2 = too much
 
 app = FastAPI()
 
@@ -88,14 +89,13 @@ def update_status():
 
         if x["humid_soil_now"] - x["humid_soil"] > 0:
             x["status_water"] = True
-        elif x["humid_soil_now"] - x["humid_soil"] < 0:
-            x["status_water"] = False
         else:
             x["status_water"] = False
 
-        if x["intensity_now"] - x["intensity"] > 5:
+        x["intensity_want"] = x["intensity"]
+        if x["intensity_now"] - x["intensity_want"] > 20:
             x["status_intensity"] = 2
-        elif x["intensity_now"] - x["intensity"] < -5:
+        elif x["intensity_now"] - x["intensity_want"] < -20:
             x["status_intensity"] = 1
         else:
             x["status_intensity"] = 0
@@ -121,6 +121,7 @@ def init():
         "humid_soil_now": 50,
         "humid_air_now": 50,
         "intensity_now": 0,
+        "intensity_want": 0,
         "status_temp": 100,
         "status_water": False,
         "status_humid": False,
@@ -128,8 +129,10 @@ def init():
         "status_intensity": 0
     })
 
+### comment this 2 line after launch the Program for the first time
 collection.delete_many({})
 init()
+###
 
 @app.get("/front")
 def send_status_front():
@@ -199,10 +202,19 @@ def set_intensity(tree_id: int, intensity: int):
     collection.update_one({"tree_id": tree_id}, {"$set": {"intensity": intensity}})
     return {"msg": "Changed intensity"}
 
+@app.put("/set_intensity_want")
+def set_intensity(tree_id: int, intensity_want: int):
+    if tree_id not in range(HOW_MANY_TREE):
+        raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
+    collection.update_one({"tree_id": tree_id}, {"$set": {"intensity_want": intensity_want}})
+    return {"msg": "Changed intensity_want"}
+
 @app.put("/set_color")
 def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
+    if color not in range(3):
+        raise HTTPException(status_code=400, detail = f"Only Have color number: 0=red, 1=green, 2=blue")
     collection.update_one({"tree_id": tree_id}, {"$set": {"color": color}})
     return {"msg": "set color"}
 
