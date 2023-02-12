@@ -184,6 +184,8 @@ def set_intensity(tree_id: int, intensity_want: int):
 def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
+    if tree_id not in range(3):
+        raise HTTPException(status_code=400, detail = f"Only Have int 0,1,2 as color")
     x = all_tree[tree_id]
     x: Tree
     x.color = color
