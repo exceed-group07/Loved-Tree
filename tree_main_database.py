@@ -29,19 +29,19 @@ class Tree(BaseModel):
     mode: int # 0 = manual, 1 = auto
     temp_manual: int # 0 - 100 celcius
     temp_auto: int # 0 - 100 celcius
-    humid_soil: int ######################################33
+    humid_soil: int # level 0-9 higher is weter
     humid_air: int # 0 - 100 % ## air humidity
     color: int # 0 = "red", 1 = "green", 2 = "blue" ## color of RGB
     intensity: int # 0 - 100 ## RGB light intensity
     temp_now: int # 0 - 100 celcius
-    humid_soil_now: int ####################################
+    humid_soil_now: int # level 0-9 higher is weter
     humid_air_now: int # 0 - 100 % ## air humidity
     intensity_now: int #
     status_temp:int # 0 = OFF, 1 = decrese_temp, 2 = increase_temp
     status_water:bool # False = OFF, TTrue = ON ## humidifier
     status_dehumid:bool # False = OFF, True = ON ## dehumid_humidifier
     status_humid: bool # False = OFF, 
-    status_intensity: int
+    status_intensity: int # 0 = okay ,1 = too little ,2 = too much
 
 app = FastAPI()
 
