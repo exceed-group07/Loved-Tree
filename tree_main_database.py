@@ -129,8 +129,10 @@ def init():
         "status_intensity": 0
     })
 
+### comment this 2 line after launch the Program for the first time
 collection.delete_many({})
 init()
+###
 
 @app.get("/front")
 def send_status_front():
