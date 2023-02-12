@@ -4,8 +4,10 @@ import ModeBT from "../components/Button"
 import Monitors from "../components/Monitor"
 import ColorBT from "../components/ColorBT"
 import Watering from "../components/watering"
+import Intensitystatus from "../components/Status"
 import "../styles/Mode_BT.css"
 import "../styles/Menu.css"
+import "../styles/Status.css"
 import RangeSlider from "../components/RangeSlider"
 import { useEffect, useState } from "react"
 import FetchData from "../api/Fetchdata"
@@ -17,7 +19,7 @@ function Menu() {
     const [humid, setHumid] = useState(true)
     const [water, setWater] = useState(true)
     const [sprinkle, setSprinkle] = useState(true)
-
+ 
 
     
 
@@ -55,6 +57,9 @@ function Menu() {
 
     return (
         <div>
+            <div className="intensity">
+                <Intensitystatus />
+            </div>
             <Monitors></Monitors>
             <br></br>
             <div class="control-panel">
