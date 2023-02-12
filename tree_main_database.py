@@ -211,6 +211,8 @@ def set_intensity(tree_id: int, intensity_want: int):
 def set_color(tree_id: int, color:int):
     if tree_id not in range(HOW_MANY_TREE):
         raise HTTPException(status_code=400, detail = f"Only Have {HOW_MANY_TREE} tree(s)")
+    if color not in range(3):
+        raise HTTPException(status_code=400, detail = f"Only Have color number: 0=red, 1=green, 2=blue")
     collection.update_one({"tree_id": tree_id}, {"$set": {"color": color}})
     return {"msg": "set color"}
 
